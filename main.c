@@ -1,9 +1,16 @@
+/*	Elimina comentarios de un programa escrito en lenguaje C.
+	Autores: Cabaleiro, Julian - Cabrera, Ivana - Martinez, Guido - 
+		- Merlis, Nicolas - Montivero, Javier 
+	15/11/2016
+*/
+
 #include<stdio.h>
 #define ESPACIO ' '
+
 int main(void){
 	int c;
 
-	init:
+	init://Estado inicial y principal, pone en la salida todo lo que lee, salvo cuando entra en un comentario.
 		switch(c = getchar()){
 			case '/':
 				goto comment;
@@ -20,7 +27,7 @@ int main(void){
 				goto init;
 		}
 		
-	comment:
+	comment://Detecta si se trata de un comentario de una o muchas lineas
 		switch(c = getchar()){
 			case '/':
 				putchar(ESPACIO);
@@ -34,7 +41,7 @@ int main(void){
 				goto init;
 		}
 		
-	singleLineComment:
+	singleLineComment://Lee hasta llegar hasta el final de la linea
 		switch(c = getchar()){
 			case '\n':
 				putchar(c);
@@ -43,7 +50,7 @@ int main(void){
 				goto singleLineComment;
 		}
 		
-	multiLineComment:
+	multiLineComment://Lee hasta que un '*' indica que quizas termine el comentario
 		switch(getchar()){
 			case '*':
 				goto pOutMLComment;
@@ -55,13 +62,13 @@ int main(void){
         switch(getchar()){
             case '/': //Fin comentario
                 goto init;
-            case '*': //Caso especial "/***/"
+            case '*': //Caso especial /***/
                  goto pOutMLComment;
             default:
                 goto multiLineComment;
         }
         
-	literalCadena:
+	literalCadena://Se encarga de que las cadenas literales que contengan comentarios no sean eliminadas
 		switch(c = getchar()){
 			case '\"':
 				putchar(c);
@@ -71,7 +78,7 @@ int main(void){
 				goto literalCadena;
 		}
 		
-	literalCaracter:
+	literalCaracter://Se encarga de que los caracteres literales que contienen comentarios no sean eliminados
 		switch(c = getchar()){
 			case '\'':
 				putchar(c);
