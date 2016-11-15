@@ -1,0 +1,39 @@
+digraph borraComment{
+	rankdir = "LR"; //El grafo se desarrolla de izquierda a derecha
+	//Estado init
+	init[label = "init -"]
+	init -> comment [label = <'/' / &epsilon;>];
+	init -> literalCadena [label = < ' \" '/ putchar(' \" ')>];
+	init -> literalCaracter[label = <' \' ' / putchar('\'')>];
+	init -> END [label = <EOF / &epsilon;>,];
+	init:ne -> init:sw [label = <c / putchar(c)>];
+	
+	//Estado END
+	END[label = "END +"]
+	//Estado comment
+	comment -> singleLineComment [label = <'/' / putchar(' ')>];
+	comment -> multiLineComment [label = <'*' / putchar(' ')>];
+	comment -> init [label = <c / putchar('/'),putchar(c)>];
+
+	//Estado singleLineComment
+	singleLineComment -> init [label = <'\n' / putchar('\n')>]; 
+	singleLineComment -> singleLineComment [label = <c / &epsilon;>];
+
+	//Estado multiLineComment
+	multiLineComment -> pOutMLComment [label = <'*' / &epsilon;>];
+	multiLineComment -> multiLineComment [label = <c / &epsilon;>];
+
+	//Estado pOutMLComment
+	pOutMLComment -> init [label = <'/' / &epsilon;>];
+	pOutMLComment -> pOutMLComment [label = <'*' / &epsilon;>];
+	pOutMLComment -> multiLineComment [label = <c / &epsilon;>];
+
+	//Estado literalCadena
+	literalCadena -> init [label = <' \" ' / putchar('\"')>];
+	literalCadena -> literalCadena [label = <c / putchar(c)>];
+
+	//Estado literalCaracter
+	literalCaracter -> init [label = <' \' ' / putchar('\'')>];
+	literalCaracter -> literalCaracter [label = <c / putchar(c)>];
+	
+}
